@@ -23,6 +23,15 @@ export class SpidRequest extends XML {
     nameIdPolicy.removeAttribute('AllowCreate');
     const sig = this.getElement('Signature');
     if (sig) this.dom.removeChild(this.getElement('Signature'));
+    const extensions = this.dom.createElement('samlp:Extensions');
+    const purpose = this.dom.createElement('spid:Purpose');
+    purpose.textContent = 'PX';
+    extensions.appendChild(purpose);
+    issuer.parentNode.insertBefore(extensions, issuer.nextSibling);
+    this.getElement('samlp:Extensions').setAttribute(
+      'xmlns:spid',
+      'https://spid.gov.it/saml-extensions',
+    );
     return this;
   }
 }
